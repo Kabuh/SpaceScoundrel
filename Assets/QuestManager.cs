@@ -24,6 +24,8 @@ public class QuestManager : MonoBehaviour {
 
     bool CommandDone = false;
 
+    private string Message;
+
     [System.Serializable]
     public class QuestClass
     {
@@ -113,14 +115,15 @@ public class QuestManager : MonoBehaviour {
         {
             ChoiseButtonOnePressed = false;
             Interpreter(ref CurrentQuestHolder.outcomeAction1, ref CurrentQuestHolder.outcomeStat1, ref CurrentQuestHolder.outcomeBool1, ref CurrentQuestHolder.outcomeAmmount1);
-            eventMessage.text = "Your " +CurrentQuestHolder.outcomeStat1 + "stat will receive modifier of " + CurrentQuestHolder.outcomeAction1 + " for the ammount of: " + CurrentQuestHolder.outcomeAmmount1;
+            Message = string.Format("Your  <color = #0000ffff>{0}</color> <b>stat</b> will receive modifier of {1} for the ammount of: {2}", CurrentQuestHolder.outcomeStat1, CurrentQuestHolder.outcomeAction1, CurrentQuestHolder.outcomeAmmount1);
+            eventMessage.text = Message;
             CommandDone = true;
         }
         if (Input.GetKeyDown("2") || ChoiseButtonTwoPressed)
         {
             ChoiseButtonTwoPressed = false;
             Interpreter(ref CurrentQuestHolder.outcomeAction2, ref CurrentQuestHolder.outcomeStat2, ref CurrentQuestHolder.outcomeBool2, ref CurrentQuestHolder.outcomeAmmount2);
-            eventMessage.text = "Your " + CurrentQuestHolder.outcomeStat2 + "stat will receive modifier of " + CurrentQuestHolder.outcomeAction2 + " for the ammount of: " + CurrentQuestHolder.outcomeAmmount2;
+            eventMessage.text = "Your <color = #0000ffff>" + CurrentQuestHolder.outcomeStat2 + "</color>stat will receive modifier of " + CurrentQuestHolder.outcomeAction2 + " for the ammount of: " + CurrentQuestHolder.outcomeAmmount2;
             CommandDone = true;
         }
         if (Input.GetKeyDown("space")&& CommandDone)
