@@ -26,9 +26,9 @@ public class ShipMovement : MonoBehaviour
     float smuggleSuccessThreshold;
 
     //ship states
-    public bool notMoving = true;//in full-stop state anywhere
-    bool docked = false; //in full-stop state on the planet
-    bool movementAllowed = false; //trigger for ship movement function
+    public bool notMoving = true;   //in full-stop state anywhere
+    bool docked = false;            //in full-stop state AND on the planet
+    bool movementAllowed = false;   //trigger for ship movement function
     
     bool overThePlanet = false;
     
@@ -41,9 +41,9 @@ public class ShipMovement : MonoBehaviour
 
     //event
     public delegate void EventHolder();
-    public static event EventHolder onDockEnter;
-    public static event EventHolder onDockLeave;
-    public static event EventHolder eventPopup;
+    public static event EventHolder OnDockEnter;
+    public static event EventHolder OnDockLeave;
+    public static event EventHolder EventPopup;
 
     void Start()
     {
@@ -69,7 +69,7 @@ public class ShipMovement : MonoBehaviour
             if (GetData.MarkerInstalled) {
                 Destroy(GetData.MarkerCurrent);
             }
-            onDockEnter();
+            OnDockEnter();
         }
 
         //destination set
@@ -90,7 +90,7 @@ public class ShipMovement : MonoBehaviour
                     GetData.FuelCurrent--;
                     if (Mathf.FloorToInt(Random.value * 100) <= systemRandomEncounterChance)
                     {
-                        eventPopup();
+                        EventPopup();
                     }
                 }
             }
@@ -109,7 +109,7 @@ public class ShipMovement : MonoBehaviour
         {
             movementAllowed = true;
             docked = false;
-            onDockLeave();
+            OnDockLeave();
             notMoving = false;
             RotateAtDestination(ref ShipDestination);
             ShipLog.text += "- departing" + "\n";
@@ -144,12 +144,13 @@ public class ShipMovement : MonoBehaviour
 
     void RotateAtDestination(ref Vector2 Destination) {
         Vector3 CurrentRotation = this.transform.localEulerAngles;
-        Vector3 AngleToDestination = new Vector3(0, 0, 0);
-        AngleToDestination.z = (Mathf.Rad2Deg * Mathf.Atan((Destination.y - this.transform.position.y)/(Destination.x - this.transform.position.x)));
+        Vector3 AngleToDestination = new Vector3(0, 0, 0)
+        {
+            z = (Mathf.Rad2Deg * Mathf.Atan((Destination.y - this.transform.position.y) / (Destination.x - this.transform.position.x)))
+        };
         if (Destination.x < this.transform.position.x) {
             AngleToDestination.z += 180;
         }
         transform.eulerAngles = AngleToDestination;
-        Vector3 CourseCorection = new Vector3(0, 0, AngleToDestination.z - CurrentRotation.z);
     }
 }

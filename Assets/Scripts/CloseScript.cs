@@ -6,8 +6,8 @@ public class CloseScript : MonoBehaviour {
 
     private void Start()
     {
-        QuestManager.closeTheQuestWindow += CloseThisMessage;
-        QuestManager.closeChoiseBluttons += CloseButtons;
+        QuestManager.CloseTheQuestWindow += CloseThisMessage;
+        QuestManager.CloseChoiseBluttons += CloseButtons;
     }
 
     public GameObject[] childChoiseButtons;

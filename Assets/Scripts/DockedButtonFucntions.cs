@@ -19,8 +19,8 @@ public class DockedButtonFucntions : MonoBehaviour
         GetData = DataHub.GetComponent<DataManagerScript>();
 
         //subscribing listeners
-        ShipMovement.onDockEnter += RunButtonCheck;
-        ShipMovement.onDockLeave += RunButtonDisable;
+        ShipMovement.OnDockEnter += RunButtonCheck;
+        ShipMovement.OnDockLeave += RunButtonDisable;
 
         RunButtonDisable();
     }

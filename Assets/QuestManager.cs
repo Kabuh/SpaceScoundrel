@@ -10,16 +10,14 @@ public class QuestManager : MonoBehaviour {
     private DataManagerScript GetData;
 
     public delegate void EventHolder();
-    public static event EventHolder closeTheQuestWindow;
-    public static event EventHolder closeChoiseBluttons;
+    public static event EventHolder CloseTheQuestWindow;
+    public static event EventHolder CloseChoiseBluttons;
 
     public GameObject EventMessage;
     public Text eventMessage;
 
     QuestClass CurrentQuestHolder;
 
-    int StatHolder;             //delete later;
-    int StatModifierHolder;
     bool ChoiseButtonOnePressed = false;
     bool ChoiseButtonTwoPressed = false;
     bool CloseButtonButtonPressed = false;
@@ -69,13 +67,12 @@ public class QuestManager : MonoBehaviour {
     private void Start()
     {
         GetData = DataHub.GetComponent<DataManagerScript>();
-        ShipMovement.eventPopup += RandomEventWritter;
+        ShipMovement.EventPopup += RandomEventWritter;
 
         path = Application.persistentDataPath + "/" + fileName;
         ReadAFile();
-        QuestClass[] QuestArray = QuestListHolder.ToArray();
 
-
+        /*
         QuestClass TestQuest = new QuestClass
         {
             index = 1,
@@ -90,7 +87,9 @@ public class QuestManager : MonoBehaviour {
             outcomeBool1 = true,
             outcomeBool2 = true,
             outcomeAmmount1 = 50,
-            outcomeAmmount2 = 50
+            outcomeAmmount2 = 50,
+            outcomeText1 = "",
+            outcomeText2 = ""
         };
 
         QuestClass ConnectorQuest = new QuestClass
@@ -107,8 +106,11 @@ public class QuestManager : MonoBehaviour {
             outcomeBool1 = true,
             outcomeBool2 = true,
             outcomeAmmount1 = 50,
-            outcomeAmmount2 = 50
+            outcomeAmmount2 = 50,
+            outcomeText1 = "",
+            outcomeText2 = ""
         };
+        */
 
         //contents = JsonUtility.ToJson(TestQuest);
         //MakeAFile(contents);
@@ -120,7 +122,7 @@ public class QuestManager : MonoBehaviour {
         {
             activatableButton = false;
             ChoiseButtonOnePressed = false;
-            closeChoiseBluttons();
+            CloseChoiseBluttons();
             Interpreter(ref CurrentQuestHolder.outcomeAction1, ref CurrentQuestHolder.outcomeStat1, ref CurrentQuestHolder.outcomeBool1, ref CurrentQuestHolder.outcomeAmmount1);
             eventMessage.text = CurrentQuestHolder.outcomeText1;
             eventMessage.text += string.Format("\n\n Your  [{0}] stat will receive modifier of [{1}] for the ammount of: [{2}]", CurrentQuestHolder.outcomeStat1, CurrentQuestHolder.outcomeAction1, CurrentQuestHolder.outcomeAmmount1);
@@ -130,7 +132,7 @@ public class QuestManager : MonoBehaviour {
         {
             activatableButton = false;
             ChoiseButtonTwoPressed = false;
-            closeChoiseBluttons();
+            CloseChoiseBluttons();
             Interpreter(ref CurrentQuestHolder.outcomeAction2, ref CurrentQuestHolder.outcomeStat2, ref CurrentQuestHolder.outcomeBool2, ref CurrentQuestHolder.outcomeAmmount2);
             eventMessage.text = CurrentQuestHolder.outcomeText2;
             eventMessage.text += string.Format("\n\n Your [{0}] stat will receive modifier of  [{1}] for the ammount of: [{2}]", CurrentQuestHolder.outcomeStat2, CurrentQuestHolder.outcomeAction2, CurrentQuestHolder.outcomeAmmount2);
@@ -139,7 +141,7 @@ public class QuestManager : MonoBehaviour {
         if ((Input.GetKeyDown("space")|| CloseButtonButtonPressed) && CommandDone)
         {
             CloseButtonButtonPressed = false;
-            closeTheQuestWindow();
+            CloseTheQuestWindow();
             CommandDone = false;
         }
     }
@@ -181,7 +183,7 @@ public class QuestManager : MonoBehaviour {
     void Interpreter(ref string command, ref string statName, ref bool swttch,  ref int ammount)
     {
         int value = -1;
-        bool subBool;
+        bool subBool;    //for buffs triggers
 
         switch (statName)
         {
