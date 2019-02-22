@@ -11,6 +11,7 @@ public class QuestManager : MonoBehaviour {
 
     public delegate void EventHolder();
     public static event EventHolder closeTheQuestWindow;
+    public static event EventHolder closeChoiseBluttons;
 
     public GameObject EventMessage;
     public Text eventMessage;
@@ -21,10 +22,12 @@ public class QuestManager : MonoBehaviour {
     int StatModifierHolder;
     bool ChoiseButtonOnePressed = false;
     bool ChoiseButtonTwoPressed = false;
+    bool CloseButtonButtonPressed = false;
+    public GameObject closeButton;
 
     bool CommandDone = false;
 
-    private string Message;
+    bool activatableButton = false;
 
     [System.Serializable]
     public class QuestClass
@@ -42,6 +45,8 @@ public class QuestManager : MonoBehaviour {
         public bool outcomeBool2;
         public int outcomeAmmount1;
         public int outcomeAmmount2;
+        public string outcomeText1;
+        public string outcomeText2;
     }
 
     public class ListMaker
@@ -111,23 +116,29 @@ public class QuestManager : MonoBehaviour {
 
     private void Update()
     {
-        if (Input.GetKeyDown("1") || ChoiseButtonOnePressed)
+        if ((Input.GetKeyDown("1") && activatableButton) || ChoiseButtonOnePressed)
         {
+            activatableButton = false;
             ChoiseButtonOnePressed = false;
+            closeChoiseBluttons();
             Interpreter(ref CurrentQuestHolder.outcomeAction1, ref CurrentQuestHolder.outcomeStat1, ref CurrentQuestHolder.outcomeBool1, ref CurrentQuestHolder.outcomeAmmount1);
-            Message = string.Format("Your  <color = #0000ffff>{0}</color> <b>stat</b> will receive modifier of {1} for the ammount of: {2}", CurrentQuestHolder.outcomeStat1, CurrentQuestHolder.outcomeAction1, CurrentQuestHolder.outcomeAmmount1);
-            eventMessage.text = Message;
+            eventMessage.text = CurrentQuestHolder.outcomeText1;
+            eventMessage.text += string.Format("\n\n Your  [{0}] stat will receive modifier of [{1}] for the ammount of: [{2}]", CurrentQuestHolder.outcomeStat1, CurrentQuestHolder.outcomeAction1, CurrentQuestHolder.outcomeAmmount1);
             CommandDone = true;
         }
-        if (Input.GetKeyDown("2") || ChoiseButtonTwoPressed)
+        if ((Input.GetKeyDown("2") && activatableButton) || ChoiseButtonTwoPressed)
         {
+            activatableButton = false;
             ChoiseButtonTwoPressed = false;
+            closeChoiseBluttons();
             Interpreter(ref CurrentQuestHolder.outcomeAction2, ref CurrentQuestHolder.outcomeStat2, ref CurrentQuestHolder.outcomeBool2, ref CurrentQuestHolder.outcomeAmmount2);
-            eventMessage.text = "Your <color = #0000ffff>" + CurrentQuestHolder.outcomeStat2 + "</color>stat will receive modifier of " + CurrentQuestHolder.outcomeAction2 + " for the ammount of: " + CurrentQuestHolder.outcomeAmmount2;
+            eventMessage.text = CurrentQuestHolder.outcomeText2;
+            eventMessage.text += string.Format("\n\n Your [{0}] stat will receive modifier of  [{1}] for the ammount of: [{2}]", CurrentQuestHolder.outcomeStat2, CurrentQuestHolder.outcomeAction2, CurrentQuestHolder.outcomeAmmount2);
             CommandDone = true;
         }
-        if (Input.GetKeyDown("space")&& CommandDone)
+        if ((Input.GetKeyDown("space")|| CloseButtonButtonPressed) && CommandDone)
         {
+            CloseButtonButtonPressed = false;
             closeTheQuestWindow();
             CommandDone = false;
         }
@@ -159,6 +170,8 @@ public class QuestManager : MonoBehaviour {
 
     void RandomEventWritter()
     {
+        activatableButton = true;
+        closeButton.SetActive(false);
         CurrentQuestHolder = QuestListHolder[Mathf.FloorToInt(Random.value * QuestListHolder.Count)];
         EventMessage.SetActive(true);
         eventMessage.text = "\t[ " + CurrentQuestHolder.name + " ]" + "\n\n" + CurrentQuestHolder.description + "\n\n\t" + "1. " + CurrentQuestHolder.choise1 + "\n\n\t" + "2. " + CurrentQuestHolder.choise2;
@@ -253,5 +266,9 @@ public class QuestManager : MonoBehaviour {
     public void ButtonSwitchTwo()
     {
         ChoiseButtonTwoPressed = true;
+    }
+
+    public void ButtonClosePress() {
+        CloseButtonButtonPressed = true;
     }
 }
