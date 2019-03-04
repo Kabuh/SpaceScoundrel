@@ -54,7 +54,7 @@ public class QuestManager : MonoBehaviour {
 
 
 
-    string fileName = "QuestData.json";
+    string fileName = "TestQuestData.json";
     string path = "";
     string contents = "";
 
@@ -70,26 +70,26 @@ public class QuestManager : MonoBehaviour {
         ShipMovement.EventPopup += RandomEventWritter;
 
         path = Application.persistentDataPath + "/" + fileName;
-        ReadAFile();
+        
 
-        /*
+        
         QuestClass TestQuest = new QuestClass
         {
             index = 1,
-            name = "Test is a Test",
-            description = "Quest started and options are layed out",
-            choise1 = "",
-            choise2 = "",
-            outcomeAction1 = "Take risk 1",
-            outcomeAction2 = "Take risk 2",
-            outcomeStat1 = "",
-            outcomeStat2 = "",
-            outcomeBool1 = true,
-            outcomeBool2 = true,
-            outcomeAmmount1 = 50,
-            outcomeAmmount2 = 50,
-            outcomeText1 = "",
-            outcomeText2 = ""
+            name= "[Placeholder quest]You have met space police",
+            description="They are requesting to dock to them and submit for a search for any illegal goods",
+            choise1="Submit to search",
+            choise2="Try to flee",
+            outcomeAction1="Reduce",
+            outcomeAction2="Reduce",
+            outcomeStat1="Money",
+            outcomeStat2="HP",
+            outcomeBool1=true,
+            outcomeBool2=true,
+            outcomeAmmount1=50,
+            outcomeAmmount2=5,
+            outcomeText1="Police finds illegal goods, confiscate it and fines you on top of it.",
+            outcomeText2="While your ship is faster than bulky police rigs, you open warp too slowly they are able to hit you with a couple of shots before you dive into wormhole.",
         };
 
         QuestClass ConnectorQuest = new QuestClass
@@ -110,10 +110,12 @@ public class QuestManager : MonoBehaviour {
             outcomeText1 = "",
             outcomeText2 = ""
         };
-        */
 
-        //contents = JsonUtility.ToJson(TestQuest);
-        //MakeAFile(contents);
+
+        contents = JsonUtility.ToJson(TestQuest);
+        MakeAFile(contents);
+
+        ReadAFile();
     }
 
     private void Update()
@@ -148,7 +150,7 @@ public class QuestManager : MonoBehaviour {
 
     void MakeAFile(string x) { //delete this later
         File.AppendAllText(path, x);
-        Debug.Log("File created.... Maybe");
+        Debug.Log("File created");
     }
 
     void ReadAFile() {
